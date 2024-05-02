@@ -10,8 +10,10 @@ data T̂ : Set where
   time : T → T̂
   ∞    : T̂
 
-Bₐ : {A : Set} → Set
-Bₐ {A} = T → A
+-- Behaviours are values which vary over time
+B : (A : Set) → Set
+B A = T → A
 
-Eₐ : {A : Set} → Set
-Eₐ {A} = List (T̂ × A)
+-- Events occur at certain points in time
+E : (A : Set) → Set
+E A = List (T̂ × A)
