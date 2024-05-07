@@ -2,7 +2,7 @@ module FRP.Behavior
   ( T : Set
   ) where
 
-open import Function using (id)
+open import Function using (id; _∘_)
 
 open import FRP.B (T)
 
@@ -15,3 +15,6 @@ Behavior A = T → A
 -- This maps from the behavior implementation to its denotation.
 at : {A : Set} → Behavior A → B A
 at = id
+
+fmap : {A B : Set} → (A → B) → Behavior A → Behavior B
+fmap f b = f ∘ b
