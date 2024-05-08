@@ -1,15 +1,15 @@
-module FRP.B.Raw
+module FRP.Behavior.Raw
   ( T : Set
   ) where
 
 open import Relation.Binary.PropositionalEquality using (_≗_; refl; sym; trans)
 
-open import FRP.B.Type (T)
-
 open import Felix.Raw
 open import Felix.Equiv
 
-module B-raw-instances where instance
+open import FRP.Behavior.Type (T)
+
+module Behavior-raw-instances where instance
 
   category : Category _→ᵇ_
   category = record { id = idᵇ; _∘_ = _∘ᵇ_ }

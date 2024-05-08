@@ -5,11 +5,11 @@ module FRP.B.Type
 open import Function using (id; const; _∘_)
 
 -- Behaviours are values which vary over time
-B : Set → Set
-B A = T → A
+𝔹 : Set → Set
+𝔹 A = T → A
 
 _→ᵇ_ : Set → Set → Set
-a →ᵇ b = B (a → b)
+a →ᵇ b = 𝔹 (a → b)
 
 idᵇ : {A : Set} → A →ᵇ A
 idᵇ = const id

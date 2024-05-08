@@ -17,6 +17,6 @@ module B-laws-instances where instance
     ; identityʳ = λ t _ → refl
     ; assoc     = λ t _ → refl
     ; ∘≈        = λ { {f = f} {k = k} h≈k f≈g t x →
-                        trans (h≈k t (f t x)) (cong (k t) (f≈g t x))
+                    trans (h≈k t (f t x)) (cong (k t) (f≈g t x))
                     }
     }
