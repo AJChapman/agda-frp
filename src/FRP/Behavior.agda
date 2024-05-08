@@ -17,6 +17,9 @@ Behavior A = T → A
 at : {A : Set} → Behavior A → B A
 at = id
 
+time : Behavior T
+time = id
+
 -- Functor
 fmap : {A B : Set} → (A → B) → Behavior A → Behavior B
 fmap f b = f ∘ b
