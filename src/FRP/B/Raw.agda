@@ -2,12 +2,25 @@ module FRP.B.Raw
   ( T : Set
   ) where
 
+open import Function using (const; _∘_)
+open import Effect.Applicative using (RawApplicative)
+open import Effect.Functor using (RawFunctor)
 open import Relation.Binary.PropositionalEquality using (_≗_; refl; sym; trans)
 
 open import FRP.B.Type (T)
 
-open import Felix.Raw
-open import Felix.Equiv
+open import Felix.Raw using (Category)
+open import Felix.Equiv using (Equivalent)
+
+functor : RawFunctor 𝔹
+functor = record { _<$>_ = λ f b → f ∘ b }
+
+applicative : RawApplicative 𝔹
+applicative = record
+  { rawFunctor = functor
+  ; pure = const
+  ; _<*>_ = λ f x t → f t (x t)
+  }
 
 module B-raw-instances where instance
 

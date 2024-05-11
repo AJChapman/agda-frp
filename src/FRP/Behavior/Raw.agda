@@ -2,12 +2,26 @@ module FRP.Behavior.Raw
   ( T : Set
   ) where
 
+open import Function using (const; _∘_)
+open import Effect.Applicative using (RawApplicative)
+open import Effect.Functor using (RawFunctor)
 open import Relation.Binary.PropositionalEquality using (_≗_; refl; sym; trans)
 
-open import Felix.Raw
-open import Felix.Equiv
+open import Felix.Raw using (Category)
+open import Felix.Equiv using (Equivalent)
+
 
 open import FRP.Behavior.Type (T)
+
+functor : RawFunctor Behavior
+functor = record { _<$>_ = λ f b → f ∘ b }
+
+applicative : RawApplicative Behavior
+applicative = record
+  { rawFunctor = functor
+  ; pure = const
+  ; _<*>_ = λ f x t → f t (x t)
+  }
 
 module Behavior-raw-instances where instance
 

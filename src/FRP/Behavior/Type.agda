@@ -24,16 +24,3 @@ f ∘ᵇ g = λ t → f t ∘ g t
 -- This maps from the behavior implementation to its denotation.
 at : {A : Set} → Behavior A → 𝔹 A
 at = id
-
--- Functor
-fmap : {A B : Set} → (A → B) → Behavior A → Behavior B
-fmap f b = f ∘ b
-
--- Applicative
-pure : {A : Set} → A → Behavior A
-pure = const
-
-infixl 5 _<*>_
-_<*>_ : ∀ {A B : Set} → Behavior (A → B) → Behavior A → Behavior B
-f <*> x = λ t → f t (x t)
-
