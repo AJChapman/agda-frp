@@ -1,11 +1,15 @@
+open import Level
+open import Relation.Binary.Bundles using (DecTotalOrder)
+
 module FRP.B.Laws
-  ( T : Set
-  ) where
+  {a ℓ : Level}
+  (time : DecTotalOrder a ℓ ℓ)
+  where
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl; trans; cong; module ≡-Reasoning)
 
-open import FRP.B.Type (T)
-open import FRP.B.Raw (T) public
+open import FRP.B.Type time
+open import FRP.B.Raw time public
 
 open import Felix.Laws
 

@@ -1,6 +1,10 @@
-module FRP.B
-  ( T : Set
-  ) where
+open import Level
+open import Relation.Binary.Bundles using (DecTotalOrder)
 
-open import FRP.B.Type (T) public
-open import FRP.B.Laws (T) public
+module FRP.B
+  {a ℓ : Level}
+  (time : DecTotalOrder a ℓ ℓ)
+  where
+
+open import FRP.B.Type time public
+open import FRP.B.Laws time public

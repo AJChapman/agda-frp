@@ -1,13 +1,17 @@
+open import Level
+open import Relation.Binary.Bundles using (DecTotalOrder)
+
 module FRP.B.Raw
-  ( T : Set
-  ) where
+  {a ℓ : Level}
+  (time : DecTotalOrder a ℓ ℓ)
+  where
 
 open import Function using (const; _∘_)
 open import Effect.Applicative using (RawApplicative)
 open import Effect.Functor using (RawFunctor)
 open import Relation.Binary.PropositionalEquality using (_≗_; refl; sym; trans)
 
-open import FRP.B.Type (T)
+open import FRP.B.Type time
 
 open import Felix.Raw using (Category)
 open import Felix.Equiv using (Equivalent)

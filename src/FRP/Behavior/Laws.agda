@@ -1,14 +1,18 @@
+open import Level
+open import Relation.Binary.Bundles using (DecTotalOrder)
+
 module FRP.Behavior.Laws
-  ( T : Set
-  ) where
+  {a ℓ : Level}
+  (time : DecTotalOrder a ℓ ℓ)
+  where
 
 open import Effect.Applicative as A using (RawApplicative)
 open import Effect.Functor as F using (RawFunctor)
 open import Relation.Binary.PropositionalEquality using (_≡_; module ≡-Reasoning; cong; refl)
 
-open import FRP.Behavior.Type (T)
-import FRP.Behavior.Raw (T) as B
-import FRP.B.Raw (T) as 𝔹
+open import FRP.Behavior.Type time
+import FRP.Behavior.Raw time as B
+import FRP.B.Raw time as 𝔹
 
 open import Felix.Laws
 
