@@ -16,6 +16,6 @@ monoid : Set a → RawMonoid a a
 monoid A = record
   { Carrier = Event A
   ; _≈_ = _≡_
-  ; _∙_ = _++_
+  ; _∙_ = merge
   ; ε = []
   }
