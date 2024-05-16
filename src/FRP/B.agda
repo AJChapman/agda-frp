@@ -7,4 +7,5 @@ module FRP.B
   where
 
 open import FRP.B.Type time public
+open import FRP.B.Raw time public
 open import FRP.B.Laws time public

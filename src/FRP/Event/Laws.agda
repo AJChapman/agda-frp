@@ -17,13 +17,13 @@ open import Relation.Binary.PropositionalEquality using (refl; cong)
 module EventMorphisms (A : Set a) where
     open import Relation.Binary.Morphism.Structures using (IsRelHomomorphism)
     open MonoidMorphisms (E.monoid A) (𝔼.monoid A)
-    open RawMonoid (E.monoid A) renaming
+    open RawMonoid (E.rawMonoid A) renaming
       ( _≈_ to _≈₁_
       ; _∙_ to _∙₁_
       ; ε to ε₁
       ; rawMagma to rawMagmaE
       )
-    open RawMonoid (𝔼.monoid A) renaming
+    open RawMonoid (𝔼.rawMonoid A) renaming
       ( _≈_ to _≈₂_
       ; _∙_ to _∙₂_
       ; ε to ε₂
@@ -45,3 +45,21 @@ module EventMorphisms (A : Set a) where
         { isMagmaHomomorphism = occs-isMagmaHomomorphism
         ; ε-homo = refl
         }
+
+    occs-functorMorphism : F.Morphism event-rawFunctor 𝔼-rawFunctor
+    occs-functorMorphism = record
+      { op = occs
+      ; op-<$> = λ f x → refl
+      }
+
+    occs-applicativeMorphism : A.Morphism event-rawApplicative 𝔼-rawApplicative
+    occs-applicativeMorphism = record
+      { functorMorphism = occs-functorMorphism
+      ; op-pure = λ x → refl
+      ; op-<*> = λ f x → refl
+      }
+
+    occs-monadMorphism : M.Morphism event-rawMonad 𝔼-rawMonad
+    occs-monadMorphism = record
+      {
+      }

@@ -8,10 +8,12 @@ module FRP.Behavior
 
 open import Function using (id; _∘_; const)
 
+open import FRP.T time
 open import FRP.Behavior.Type time
+open import FRP.Behavior.Raw time
 open import FRP.Behavior.Laws time
 
 open import FRP.B time
 
-time : Behavior T
-time = id
+timeᵇ : Behavior T
+timeᵇ = id

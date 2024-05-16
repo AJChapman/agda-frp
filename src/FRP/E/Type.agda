@@ -17,3 +17,6 @@ open import FRP.T time using (T̂; _≤ᵗ?_) public
 
 merge : {A : Set a} → 𝔼 A → 𝔼 A → 𝔼 A
 merge = List.merge (λ (t₁ , _) (t₂ , _) → t₁ ≤ᵗ? t₂)
+
+mapTimes : {A : Set a} → (T̂ → T̂) → 𝔼 A → 𝔼 A
+mapTimes f = List.map (λ (t₁ , x) → (f t₁ , x))

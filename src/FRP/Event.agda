@@ -7,3 +7,5 @@ module FRP.Event
   where
 
 open import FRP.Event.Type time public
+open import FRP.Event.Raw time public
+open import FRP.Event.Laws time public

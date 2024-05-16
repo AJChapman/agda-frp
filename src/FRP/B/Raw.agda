@@ -16,12 +16,12 @@ open import FRP.B.Type time
 open import Felix.Raw using (Category)
 open import Felix.Equiv using (Equivalent)
 
-functor : RawFunctor 𝔹
-functor = record { _<$>_ = λ f b → f ∘ b }
+𝔹-rawFunctor : RawFunctor 𝔹
+𝔹-rawFunctor = record { _<$>_ = λ f b → f ∘ b }
 
-applicative : RawApplicative 𝔹
-applicative = record
-  { rawFunctor = functor
+𝔹-rawApplicative : RawApplicative 𝔹
+𝔹-rawApplicative = record
+  { rawFunctor = 𝔹-rawFunctor
   ; pure = const
   ; _<*>_ = λ f x t → f t (x t)
   }

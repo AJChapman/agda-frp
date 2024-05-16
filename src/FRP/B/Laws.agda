@@ -9,7 +9,7 @@ module FRP.B.Laws
 open import Relation.Binary.PropositionalEquality using (_≡_; refl; trans; cong; module ≡-Reasoning)
 
 open import FRP.B.Type time
-open import FRP.B.Raw time public
+open import FRP.B.Raw time
 
 open import Felix.Laws
 

@@ -16,12 +16,12 @@ open import Felix.Equiv using (Equivalent)
 
 open import FRP.Behavior.Type time
 
-functor : RawFunctor Behavior
-functor = record { _<$>_ = λ f b → f ∘ b }
+behavior-rawFunctor : RawFunctor Behavior
+behavior-rawFunctor = record { _<$>_ = λ f b → f ∘ b }
 
-applicative : RawApplicative Behavior
-applicative = record
-  { rawFunctor = functor
+behavior-rawApplicative : RawApplicative Behavior
+behavior-rawApplicative = record
+  { rawFunctor = behavior-rawFunctor
   ; pure = const
   ; _<*>_ = λ f x t → f t (x t)
   }
