@@ -22,6 +22,7 @@ open DecTotalOrder time renaming
   ; reflexive to reflexiveₜ
   ; trans to transₜ
   ; antisym to antisymₜ
+  ; totalOrder to totalOrderₜ
   ; total to ≤ₜ-total
   ) using () public
 
@@ -30,7 +31,7 @@ data T̂ : Set a where
   t  : T → T̂
   ∞  : T̂
 
-infix 4 _≈ᵗ_ _≤ᵗ_ _≤ᵗ_ _≟ᵗ_
+infix 4 _≈ᵗ_ _≤ᵗ_ _≤ᵗ?_ _≟ᵗ_
 
 data _≈ᵗ_ : Rel T̂ ℓ where
   -∞-refl : -∞ ≈ᵗ -∞
@@ -103,47 +104,47 @@ antisymᵗ (t-≤ᵗ x) (t-≤ᵗ y) = t-refl (antisymₜ x y)
 ≤ᵗ-total ∞ y = inj₂ ≤ᵗ-∞
 
 module T̂-ordering where
-    open import Relation.Binary.Structures _≈ᵗ_ using (IsEquivalence; IsPreorder; IsPartialOrder; IsTotalOrder; IsDecTotalOrder)
+  open import Relation.Binary.Structures _≈ᵗ_ using (IsEquivalence; IsPreorder; IsPartialOrder; IsTotalOrder; IsDecTotalOrder)
 
-    T̂-isEquivalence : IsEquivalence
-    T̂-isEquivalence = record
-      { refl = ≈ᵗ-refl
-      ; sym = ≈ᵗ-sym
-      ; trans = ≈ᵗ-trans
-      }
+  T̂-isEquivalence : IsEquivalence
+  T̂-isEquivalence = record
+    { refl = ≈ᵗ-refl
+    ; sym = ≈ᵗ-sym
+    ; trans = ≈ᵗ-trans
+    }
 
-    T̂-isPreorder : IsPreorder _≤ᵗ_
-    T̂-isPreorder = record
-      { isEquivalence = T̂-isEquivalence
-      ; reflexive = ≈ᵗ-≤ᵗ
-      ; trans = ≤ᵗ-trans
-      }
+  T̂-isPreorder : IsPreorder _≤ᵗ_
+  T̂-isPreorder = record
+    { isEquivalence = T̂-isEquivalence
+    ; reflexive = ≈ᵗ-≤ᵗ
+    ; trans = ≤ᵗ-trans
+    }
 
-    T̂-isPartialOrder : IsPartialOrder _≤ᵗ_
-    T̂-isPartialOrder = record
-      { isPreorder = T̂-isPreorder
-      ; antisym = antisymᵗ
-      }
+  T̂-isPartialOrder : IsPartialOrder _≤ᵗ_
+  T̂-isPartialOrder = record
+    { isPreorder = T̂-isPreorder
+    ; antisym = antisymᵗ
+    }
 
-    T̂-isTotalOrder : IsTotalOrder _≤ᵗ_
-    T̂-isTotalOrder = record
-      { isPartialOrder = T̂-isPartialOrder
-      ; total = ≤ᵗ-total
-      }
+  T̂-isTotalOrder : IsTotalOrder _≤ᵗ_
+  T̂-isTotalOrder = record
+    { isPartialOrder = T̂-isPartialOrder
+    ; total = ≤ᵗ-total
+    }
 
-    T̂-isDecTotalOrder : IsDecTotalOrder _≤ᵗ_
-    T̂-isDecTotalOrder = record
-      { isTotalOrder = T̂-isTotalOrder
-      ; _≟_ = _≟ᵗ_
-      ; _≤?_ = _≤ᵗ?_
-      }
+  T̂-isDecTotalOrder : IsDecTotalOrder _≤ᵗ_
+  T̂-isDecTotalOrder = record
+    { isTotalOrder = T̂-isTotalOrder
+    ; _≟_ = _≟ᵗ_
+    ; _≤?_ = _≤ᵗ?_
+    }
 
-    T̂-decTotalOrder : DecTotalOrder a ℓ ℓ
-    T̂-decTotalOrder = record
-      { Carrier = T̂
-      ; _≈_ = _≈ᵗ_
-      ; _≤_ = _≤ᵗ_
-      ; isDecTotalOrder = T̂-isDecTotalOrder
-      }
+  T̂-decTotalOrder : DecTotalOrder a ℓ ℓ
+  T̂-decTotalOrder = record
+    { Carrier = T̂
+    ; _≈_ = _≈ᵗ_
+    ; _≤_ = _≤ᵗ_
+    ; isDecTotalOrder = T̂-isDecTotalOrder
+    }
 
 open T̂-ordering public
