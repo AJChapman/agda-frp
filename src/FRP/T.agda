@@ -33,12 +33,12 @@ data T̂ : Set a where
 
 infix 4 _≈ᵗ_ _≤ᵗ_ _≤ᵗ?_ _≟ᵗ_
 
-data _≈ᵗ_ : Rel T̂ ℓ where
+data _≈ᵗ_ : Rel T̂ (a ⊔ ℓ) where
   -∞-refl : -∞ ≈ᵗ -∞
   ∞-refl :   ∞ ≈ᵗ  ∞
   t-refl : ∀{t₁ t₂ : T} → t₁ ≈ₜ t₂ → t t₁ ≈ᵗ t t₂
 
-data _≤ᵗ_ : Rel T̂ ℓ where
+data _≤ᵗ_ : Rel T̂ (a ⊔ ℓ) where
   -∞-≤ᵗ : ∀{t₂ : T̂} → -∞ ≤ᵗ t₂
   ≤ᵗ-∞  : ∀{t₁ : T̂} → t₁ ≤ᵗ ∞
   t-≤ᵗ  : ∀{t₁ t₂ : T} → t₁ ≤ₜ t₂ → t t₁ ≤ᵗ t t₂
@@ -139,7 +139,7 @@ module T̂-ordering where
     ; _≤?_ = _≤ᵗ?_
     }
 
-  T̂-decTotalOrder : DecTotalOrder a ℓ ℓ
+  T̂-decTotalOrder : DecTotalOrder a (a ⊔ ℓ) (a ⊔ ℓ)
   T̂-decTotalOrder = record
     { Carrier = T̂
     ; _≈_ = _≈ᵗ_

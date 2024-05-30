@@ -7,7 +7,8 @@ module FRP.E.Raw
   where
 
 open import FRP.T time
-open import FRP.E.Type time
+open import FRP.E.Type time renaming (_<$>_ to _<$ᵉ>_)
+open import FRP.F time renaming (_<$>_ to _<$ᶠ>_) using ()
 
 open import Algebra using (RawMonoid)
 open import Data.List using ([]; map; [_])
@@ -17,7 +18,7 @@ open import Effect.Functor using (RawFunctor)
 open import Effect.Monad using (RawMonad)
 open import Relation.Binary.PropositionalEquality using (_≡_)
 
-𝔼-rawMonoid : Set a → RawMonoid a a
+𝔼-rawMonoid : Set a → RawMonoid (suc a ⊔ ℓ) (suc a ⊔ ℓ)
 𝔼-rawMonoid A = record
   { Carrier = 𝔼 A
   ; _≈_ = _≡_
@@ -27,7 +28,7 @@ open import Relation.Binary.PropositionalEquality using (_≡_)
 
 𝔼-rawFunctor : RawFunctor 𝔼
 𝔼-rawFunctor = record
-  { _<$>_ = λ f → map λ (t₁ , x) → t₁ , f x }
+  { _<$>_ = _<$ᵉ>_ }
 
 𝔼-rawApplicative : RawApplicative 𝔼
 𝔼-rawApplicative = record
