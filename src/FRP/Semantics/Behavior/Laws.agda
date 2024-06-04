@@ -1,19 +1,19 @@
 open import Level
-open import Relation.Binary.Bundles using (DecTotalOrder)
+open import FRP.Time.DecOrderedGroup
 
-module FRP.B.Laws
+module FRP.Semantics.Behavior.Laws
   {a ℓ : Level}
-  (time : DecTotalOrder a ℓ ℓ)
+  (Time : DecOrderedGroup a ℓ ℓ)
   where
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl; trans; cong; module ≡-Reasoning)
 
-open import FRP.B.Type time
-open import FRP.B.Raw time
+open import FRP.Semantics.Behavior.Type Time
+open import FRP.Semantics.Behavior.Raw Time
 
 open import Felix.Laws
 
-module B-laws-instances where instance
+module behavior-laws-instances where instance
 
   category : Category _→ᵇ_
   category = record

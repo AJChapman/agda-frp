@@ -1,13 +1,14 @@
 open import Level
-open import Relation.Binary.Bundles using (DecTotalOrder)
+open import FRP.Time.DecOrderedGroup
 
 module index
   {a ℓ : Level}
-  (time : DecTotalOrder a ℓ ℓ)
+  (Time : DecOrderedGroup a ℓ ℓ)
   where
 
-open import FRP.T time
-open import FRP.B time
-open import FRP.Behavior time
-open import FRP.E time
-open import FRP.Event time
+open import FRP.Time Time
+open import FRP.Semantics.Behavior Time
+open import FRP.Semantics.Future Time
+open import FRP.Semantics.Event Time
+open import FRP.Implementation.Behavior Time
+open import FRP.Implementation.Event Time

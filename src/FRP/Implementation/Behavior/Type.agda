@@ -1,15 +1,19 @@
 open import Level
-open import Relation.Binary.Bundles using (DecTotalOrder)
+open import FRP.Time.DecOrderedGroup
 
-module FRP.Behavior.Type
+module FRP.Implementation.Behavior.Type
   {a ℓ : Level}
-  (time : DecTotalOrder a ℓ ℓ)
+  (Time : DecOrderedGroup a ℓ ℓ)
   where
 
 open import Function using (id; _∘_; const)
 
-open import FRP.T time using (T)
-open import FRP.B time using (𝔹)
+open import FRP.Time Time using (T)
+open import FRP.Semantics.Behavior Time as Bₛ using ()
+
+private
+  variable
+    A : Set a
 
 -- This is our behavior implementation.
 -- For now it's identical to the denotation, but this
@@ -27,5 +31,5 @@ _∘ᵇ_ : {A B C : Set a} → (B →ᵇ C) → (A →ᵇ B) → (A →ᵇ C)
 f ∘ᵇ g = λ t → f t ∘ g t
 
 -- This maps from the behavior implementation to its denotation.
-at : {A : Set a} → Behavior A → 𝔹 A
+at : {A : Set a} → Behavior A → Bₛ.Behavior A
 at = id

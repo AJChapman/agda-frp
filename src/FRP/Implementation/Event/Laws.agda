@@ -1,29 +1,32 @@
 open import Level
-open import Relation.Binary.Bundles using (DecTotalOrder)
+open import FRP.Time.DecOrderedGroup
 
-module FRP.Event.Laws
+module FRP.Implementation.Event.Laws
   {a ℓ : Level}
-  (time : DecTotalOrder a ℓ ℓ)
+  (Time : DecOrderedGroup a ℓ ℓ)
   where
 
 open import Algebra using (RawMonoid)
-open import FRP.Event time using (occs)
-import FRP.Event.Raw time as E
-import FRP.E.Raw time as 𝔼
-
 open import Algebra.Morphism.Structures using (module MagmaMorphisms; module MonoidMorphisms)
+open import Effect.Functor as F using ()
+open import Effect.Applicative as A using ()
 open import Relation.Binary.PropositionalEquality using (refl; cong)
+
+open import FRP.Implementation.Event.Type Time using (occs)
+open import FRP.Implementation.Event.Raw Time as E using ()
+open import FRP.Semantics.Event.Raw Time as Eₛ using ()
+
 
 module EventMorphisms (A : Set a) where
     open import Relation.Binary.Morphism.Structures using (IsRelHomomorphism)
-    open MonoidMorphisms (E.monoid A) (𝔼.monoid A)
-    open RawMonoid (E.rawMonoid A) renaming
+    open MonoidMorphisms (E.event-rawMonoid A) (Eₛ.event-rawMonoid A)
+    open RawMonoid (E.event-rawMonoid A) renaming
       ( _≈_ to _≈₁_
       ; _∙_ to _∙₁_
       ; ε to ε₁
       ; rawMagma to rawMagmaE
       )
-    open RawMonoid (𝔼.rawMonoid A) renaming
+    open RawMonoid (Eₛ.event-rawMonoid A) renaming
       ( _≈_ to _≈₂_
       ; _∙_ to _∙₂_
       ; ε to ε₂
@@ -46,20 +49,20 @@ module EventMorphisms (A : Set a) where
         ; ε-homo = refl
         }
 
-    occs-functorMorphism : F.Morphism event-rawFunctor 𝔼-rawFunctor
+    occs-functorMorphism : F.Morphism E.event-rawFunctor Eₛ.event-rawFunctor
     occs-functorMorphism = record
       { op = occs
       ; op-<$> = λ f x → refl
       }
 
-    occs-applicativeMorphism : A.Morphism event-rawApplicative 𝔼-rawApplicative
-    occs-applicativeMorphism = record
-      { functorMorphism = occs-functorMorphism
-      ; op-pure = λ x → refl
-      ; op-<*> = λ f x → refl
-      }
-
-    occs-monadMorphism : M.Morphism event-rawMonad 𝔼-rawMonad
-    occs-monadMorphism = record
-      {
-      }
+--     occs-applicativeMorphism : A.Morphism E.event-rawApplicative Eₛ-event-rawApplicative
+--     occs-applicativeMorphism = record
+--       { functorMorphism = occs-functorMorphism
+--       ; op-pure = λ x → refl
+--       ; op-<*> = λ f x → refl
+--       }
+-- 
+--     occs-monadMorphism : M.Morphism E.event-rawMonad Eₛ-event-rawMonad
+--     occs-monadMorphism = record
+--       {
+--       }

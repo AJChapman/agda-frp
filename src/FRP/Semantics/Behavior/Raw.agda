@@ -1,9 +1,9 @@
 open import Level
-open import Relation.Binary.Bundles using (DecTotalOrder)
+open import FRP.Time.DecOrderedGroup
 
-module FRP.B.Raw
+module FRP.Semantics.Behavior.Raw
   {a ℓ : Level}
-  (time : DecTotalOrder a ℓ ℓ)
+  (Time : DecOrderedGroup a ℓ ℓ)
   where
 
 open import Function using (const; _∘_)
@@ -11,22 +11,22 @@ open import Effect.Applicative using (RawApplicative)
 open import Effect.Functor using (RawFunctor)
 open import Relation.Binary.PropositionalEquality using (_≗_; refl; sym; trans)
 
-open import FRP.B.Type time
+open import FRP.Semantics.Behavior.Type Time
 
 open import Felix.Raw using (Category)
 open import Felix.Equiv using (Equivalent)
 
-𝔹-rawFunctor : RawFunctor 𝔹
-𝔹-rawFunctor = record { _<$>_ = λ f b → f ∘ b }
+behavior-rawFunctor : RawFunctor Behavior
+behavior-rawFunctor = record { _<$>_ = λ f b → f ∘ b }
 
-𝔹-rawApplicative : RawApplicative 𝔹
-𝔹-rawApplicative = record
-  { rawFunctor = 𝔹-rawFunctor
+behavior-rawApplicative : RawApplicative Behavior
+behavior-rawApplicative = record
+  { rawFunctor = behavior-rawFunctor
   ; pure = const
   ; _<*>_ = λ f x t → f t (x t)
   }
 
-module B-raw-instances where instance
+module behavior-raw-instances where instance
 
   category : Category _→ᵇ_
   category = record { id = idᵇ; _∘_ = _∘ᵇ_ }
