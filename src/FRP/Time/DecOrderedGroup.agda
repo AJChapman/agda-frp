@@ -44,3 +44,4 @@ record DecOrderedGroup a ℓ₁ ℓ₂ : Set (suc (a ⊔ ℓ₁ ⊔ ℓ₂)) whe
 
   open DecPoset decPoset public
     using (module Eq)
+ 

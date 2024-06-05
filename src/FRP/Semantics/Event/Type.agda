@@ -16,7 +16,7 @@ open import Data.List.Relation.Unary.Linked as Linked using ([-])
 open import FRP.Time Time using (T̂; 0ᵗ; _≤ᵗ_)
 open import FRP.Semantics.Future Time
   renaming (_<$>_ to _<$ᶠ>_)
-  using (F; mapTime; F-totalOrder; F-decTotalOrder; NotAfter; notAfter?; F-<$>-Preserves-NotAfter; F-mapTime-Preserves-NotAfter)
+  using (Future; mapTime; future-totalOrder; future-decTotalOrder; _≤ᵗ,_; notAfter?; future-<$>-Preserves-≤ᵗ,; future-mapTime-Preserves-≤ᵗ,)
 
 private
   variable
@@ -25,13 +25,13 @@ private
 -- Events' occurrences are at points in time relative to a common starting point,
 -- and they are sorted by this time (earliest to latest).
 -- Negative times are permissible, and may even make sense sometimes!
--- An `Event A` is a list of `F A`s, sorted by time, ascending.
+-- An `Event A` is a list of `Future A`s, sorted by time, ascending.
 -- Terms of this type are a dependent pair of list and proof that the list is sorted.
-Event : Set a → Set (suc a ⊔ ℓ)
-Event A = ∃ (Sorted (F-totalOrder A))
+Event : Set a → Set (a ⊔ ℓ)
+Event A = ∃ (Sorted (future-totalOrder A))
 
 -- An event which never occurs
-empty : {A : Set a} → Event A
+empty : Event A
 empty = List.[] , Linked.[]
 
 now : A → Event A
@@ -40,22 +40,22 @@ now x = [ 0ᵗ , x ] , [-]
 -- Merge two events, maintaining their time-sortedness
 merge : Event A → Event A → Event A
 merge {A} (e₁ , sorted₁) (e₂ , sorted₂) =
-  List.merge notAfter? e₁ e₂ , merge⁺ (F-decTotalOrder A) sorted₁ sorted₂
+  List.merge notAfter? e₁ e₂ , merge⁺ (future-decTotalOrder A) sorted₁ sorted₂
 
--- Map the given function over each `F A` in the event.
+-- Map the given function over each `Future A` in the event.
 -- You must also provide proof that this mapping preserves the time-sortedness of the event.
-map : (f : F A → F B) → (f Preserves (NotAfter {A}) ⟶ (NotAfter {B})) → Event A → Event B
-map {A} {B} f p (e , sorted) = List.map f e , map⁺ (F-totalOrder A) (F-totalOrder B) p sorted
+map : (f : Future A → Future B) → (f Preserves (_≤ᵗ,_ {A}) ⟶ (_≤ᵗ,_ {B})) → Event A → Event B
+map {A} {B} f p (e , sorted) = List.map f e , map⁺ (future-totalOrder A) (future-totalOrder B) p sorted
 
 -- Map the given function over each `A` in the event
 infixl 4 _<$>_
 _<$>_ : (A → B) → Event A → Event B
-f <$> x = map (f <$ᶠ>_) (F-<$>-Preserves-NotAfter f) x
+f <$> x = map (f <$ᶠ>_) (future-<$>-Preserves-≤ᵗ, f) x
 
--- Map the given function over the time of each `F A` in the event.
+-- Map the given function over the time of each `Future A` in the event.
 -- You must also provide proof that this mapping preserves the time-sortedness of the event.
 mapTimes : (f : T̂ → T̂) → (f Preserves _≤ᵗ_ ⟶ _≤ᵗ_) → Event A → Event A
 mapTimes {A} f p (e , sorted) =
   List.map (mapTime f) e
-    , map⁺ (F-totalOrder A) (F-totalOrder A) (F-mapTime-Preserves-NotAfter f p) sorted
+    , map⁺ (future-totalOrder A) (future-totalOrder A) (future-mapTime-Preserves-≤ᵗ, f p) sorted
 
