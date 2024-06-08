@@ -17,7 +17,7 @@ open import Effect.Functor using (RawFunctor)
 open import Effect.Monad using (RawMonad)
 open import Relation.Binary.PropositionalEquality using (_≡_)
 
-event-rawMonoid : Set a → RawMonoid (suc a ⊔ ℓ) (suc a ⊔ ℓ)
+event-rawMonoid : Set a → RawMonoid (a ⊔ ℓ) (a ⊔ ℓ)
 event-rawMonoid A = record
   { Carrier = Event A
   ; _≈_ = _≡_

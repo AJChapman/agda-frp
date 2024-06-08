@@ -18,7 +18,11 @@ open import Effect.Functor using (RawFunctor)
 open import Effect.Monad using (RawMonad)
 open import Relation.Binary.PropositionalEquality using (_≡_)
 
-event-rawMonoid : Set a → RawMonoid (suc a ⊔ ℓ) (suc a ⊔ ℓ)
+private
+  variable
+    A : Set a
+
+event-rawMonoid : Set a → RawMonoid (a ⊔ ℓ) (a ⊔ ℓ)
 event-rawMonoid A = record
   { Carrier = Event A
   ; _≈_ = _≡_
@@ -30,10 +34,13 @@ event-rawFunctor : RawFunctor Event
 event-rawFunctor = record
   { _<$>_ = _<$ᵉ>_ }
 
+-- event-join : Event (Event A) → Event A
+-- event-join = ?
+
 -- event-rawApplicative : RawApplicative Event
 -- event-rawApplicative = record
 --   { rawFunctor = event-rawFunctor
---   ; pure = λ x → [ 0ᵗ , x ]
+--   ; pure = now
 --   ; _<*>_ = {!!} -- {A B : Set a} → Event (A → B) → Event A → Event B
 --   -- Would it make sense to:
 --   --   1. Drop any As before the first occurence of an A → B,
@@ -41,7 +48,7 @@ event-rawFunctor = record
 --   -- Is this compatible with either of the bind implementations suggested below?
 --   -- Apply in terms of bind:
 --   --   ef <*> ex = ef >>= (λ f → ex >>= (λ x → pure (f x)))
---   -- If we also make `pure = λ x → [ 0 , x ]`, treating the time as relative, then
+--   -- If we also make `pure = now`, treating the time as relative, then
 --   -- Using bind #2 below:
 --   --   Apply (λ f → ex >>= (λ x → pure (f x))) to each A → B event, resulting in:
 --   --     Apply (λ x → pure (f x)) to each A event, resulting in:
@@ -57,7 +64,7 @@ event-rawFunctor = record
 -- event-rawMonad : RawMonad Event
 -- event-rawMonad = record
 --   { rawApplicative = event-rawApplicative
---   ; _>>=_ = {!!} -- {A B : Set a} → Event A → (A → Event B) → Event B
+--   ; _>>=_ = λ a f → event-join (f <$ᵉ> a) -- {A B : Set a} → Event A → (A → Event B) → Event B
 --   -- Would it make sense to (as per the paper):
 --   --   1. Apply the A → Event B to each A, resulting in a Event (Event B)
 --   --   2. Delay the occurrences of the Event B to be no earlier than the event which caused it,

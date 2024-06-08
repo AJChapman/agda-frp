@@ -37,13 +37,13 @@ data _≈ᵗ,_ {A : Set a} : Rel (Future A) (a ⊔ ℓ) where
 data _≤ᵗ,_ {A : Set a} : Rel (Future A) (a ⊔ ℓ) where
   notAfter : ∀{t₁ t₂} {x y : A} → (t₁≤t₂ : t₁ ≤ᵗ t₂) → (t₁ , x) ≤ᵗ, (t₂ , y)
 
-simultaneous? : Decidable (_≈ᵗ,_ {A})
-simultaneous? (t₁ , x) (t₂ , y) with t₁ ≟ᵗ t₂
+_≟ᵗ,_ : Decidable (_≈ᵗ,_ {A})
+_≟ᵗ,_ (t₁ , x) (t₂ , y) with t₁ ≟ᵗ t₂
 ...                               | (yes t₁≈t₂) = yes (sim t₁≈t₂)
 ...                               | (no t₁¬≈t₂) = no λ{ (sim t₁≈t₂) → t₁¬≈t₂ t₁≈t₂}
 
-notAfter? : Decidable (_≤ᵗ,_ {A})
-notAfter? (t₁ , x) (t₂ , y) with t₁ ≤?ᵗ t₂
+_≤?ᵗ,_ : Decidable (_≤ᵗ,_ {A})
+_≤?ᵗ,_ (t₁ , x) (t₂ , y) with t₁ ≤?ᵗ t₂
 ...                           | (yes t₁≤t₂) = yes (notAfter t₁≤t₂)
 ...                           | (no ¬t₁≤t₂) = no λ{ (notAfter t₁≤t₂) → ¬t₁≤t₂ t₁≤t₂ }
 
@@ -56,17 +56,17 @@ sim-sym {A} (sim t₁≈t₂) = sim (≈ᵗ-sym t₁≈t₂)
 sim-trans : Transitive (_≈ᵗ,_ {A})
 sim-trans (sim t₁≈t₂) (sim t₂≈t₃) = sim (≈ᵗ-trans t₁≈t₂ t₂≈t₃)
 
-sim-notAfter : _≈ᵗ,_ {A} ⇒ _≤ᵗ,_ {A}
-sim-notAfter (sim t₁≈t₂) = notAfter (reflexiveᵗ t₁≈t₂)
+sim-≤ᵗ, : _≈ᵗ,_ {A} ⇒ _≤ᵗ,_ {A}
+sim-≤ᵗ, (sim t₁≈t₂) = notAfter (reflexiveᵗ t₁≈t₂)
 
-sim-notAfter-trans : Transitive (_≤ᵗ,_ {A})
-sim-notAfter-trans (notAfter t₁≤t₂) (notAfter t₂≤t₃) = notAfter (≤ᵗ-trans t₁≤t₂ t₂≤t₃)
+sim-≤ᵗ,-trans : Transitive (_≤ᵗ,_ {A})
+sim-≤ᵗ,-trans (notAfter t₁≤t₂) (notAfter t₂≤t₃) = notAfter (≤ᵗ-trans t₁≤t₂ t₂≤t₃)
 
-sim-notAfter-antisym : Antisymmetric (_≈ᵗ,_ {A}) (_≤ᵗ,_ {A})
-sim-notAfter-antisym (notAfter i≤j) (notAfter j≤i) = sim (antisymᵗ i≤j j≤i)
+sim-≤ᵗ,-antisym : Antisymmetric (_≈ᵗ,_ {A}) (_≤ᵗ,_ {A})
+sim-≤ᵗ,-antisym (notAfter i≤j) (notAfter j≤i) = sim (antisymᵗ i≤j j≤i)
 
-notAfter-total : Total (_≤ᵗ,_ {A}) -- ∀ x y → notAfter x y ⊎ notAfter y x
-notAfter-total (t₁ , x) (t₂ , y) = map notAfter notAfter (totalᵗ t₁ t₂)
+≤ᵗ,-total : Total (_≤ᵗ,_ {A}) -- ∀ x y → x ≤ᵗ, y ⊎ y ≤ᵗ,x
+≤ᵗ,-total (t₁ , x) (t₂ , y) = map notAfter notAfter (totalᵗ t₁ t₂)
 
 module future-ordering (A : Set a) where
   open import Relation.Binary.Structures (_≈ᵗ,_ {A})
@@ -82,20 +82,20 @@ module future-ordering (A : Set a) where
   future-isPreorder : IsPreorder _≤ᵗ,_
   future-isPreorder = record
     { isEquivalence = future-isEquivalence
-    ; reflexive = sim-notAfter
-    ; trans = sim-notAfter-trans
+    ; reflexive = sim-≤ᵗ,
+    ; trans = sim-≤ᵗ,-trans
     }
 
   future-isPartialOrder : IsPartialOrder _≤ᵗ,_
   future-isPartialOrder = record
     { isPreorder = future-isPreorder
-    ; antisym = sim-notAfter-antisym
+    ; antisym = sim-≤ᵗ,-antisym
     }
 
   future-isTotalOrder : IsTotalOrder _≤ᵗ,_
   future-isTotalOrder = record
     { isPartialOrder = future-isPartialOrder
-    ; total = notAfter-total
+    ; total = ≤ᵗ,-total
     }
 
   future-totalOrder : TotalOrder a (a ⊔ ℓ) (a ⊔ ℓ)
@@ -109,8 +109,8 @@ module future-ordering (A : Set a) where
   future-isDecTotalOrder : IsDecTotalOrder _≤ᵗ,_
   future-isDecTotalOrder = record
     { isTotalOrder = future-isTotalOrder
-    ; _≟_ = simultaneous?
-    ; _≤?_ = notAfter?
+    ; _≟_ = _≟ᵗ,_
+    ; _≤?_ = _≤?ᵗ,_
     }
 
   future-decTotalOrder : DecTotalOrder a (a ⊔ ℓ) (a ⊔ ℓ)
@@ -123,8 +123,8 @@ module future-ordering (A : Set a) where
 
 open future-ordering public
 
-future-<$>-Preserves-≤ᵗ, : (f : A → B) → (f <$>_) Preserves (_≤ᵗ,_ {A}) ⟶ (_≤ᵗ,_ {B}) -- ∀ {x y : A} →  x ≤ᵗ, y → f x ≤ᵗ, f y
+future-<$>-Preserves-≤ᵗ, : (f : A → B) → (f <$>_) Preserves _≤ᵗ,_ ⟶ _≤ᵗ,_ -- ∀ {x y : A} →  x ≤ᵗ, y → f x ≤ᵗ, f y
 future-<$>-Preserves-≤ᵗ, f (notAfter x≤y) = notAfter x≤y
 
-future-mapTime-Preserves-≤ᵗ, : (f : T̂ → T̂) → f Preserves _≤ᵗ_ ⟶ _≤ᵗ_ → mapTime f Preserves (_≤ᵗ,_ {A}) ⟶ (_≤ᵗ,_ {A})
+future-mapTime-Preserves-≤ᵗ, : (f : T̂ → T̂) → f Preserves _≤ᵗ_ ⟶ _≤ᵗ_ → mapTime f Preserves _≤ᵗ,_ ⟶ _≤ᵗ,_ {A}
 future-mapTime-Preserves-≤ᵗ, f p (notAfter x≤y) = notAfter (p x≤y)

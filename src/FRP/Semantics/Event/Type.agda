@@ -16,7 +16,7 @@ open import Data.List.Relation.Unary.Linked as Linked using ([-])
 open import FRP.Time Time using (T̂; 0ᵗ; _≤ᵗ_)
 open import FRP.Semantics.Future Time
   renaming (_<$>_ to _<$ᶠ>_)
-  using (Future; mapTime; future-totalOrder; future-decTotalOrder; _≤ᵗ,_; notAfter?; future-<$>-Preserves-≤ᵗ,; future-mapTime-Preserves-≤ᵗ,)
+  using (Future; mapTime; future-totalOrder; future-decTotalOrder; _≤ᵗ,_; _≤?ᵗ,_; future-<$>-Preserves-≤ᵗ,; future-mapTime-Preserves-≤ᵗ,)
 
 private
   variable
@@ -40,11 +40,11 @@ now x = [ 0ᵗ , x ] , [-]
 -- Merge two events, maintaining their time-sortedness
 merge : Event A → Event A → Event A
 merge {A} (e₁ , sorted₁) (e₂ , sorted₂) =
-  List.merge notAfter? e₁ e₂ , merge⁺ (future-decTotalOrder A) sorted₁ sorted₂
+  List.merge _≤?ᵗ,_ e₁ e₂ , merge⁺ (future-decTotalOrder A) sorted₁ sorted₂
 
 -- Map the given function over each `Future A` in the event.
 -- You must also provide proof that this mapping preserves the time-sortedness of the event.
-map : (f : Future A → Future B) → (f Preserves (_≤ᵗ,_ {A}) ⟶ (_≤ᵗ,_ {B})) → Event A → Event B
+map : (f : Future A → Future B) → f Preserves _≤ᵗ,_ ⟶ _≤ᵗ,_ → Event A → Event B
 map {A} {B} f p (e , sorted) = List.map f e , map⁺ (future-totalOrder A) (future-totalOrder B) p sorted
 
 -- Map the given function over each `A` in the event
@@ -54,7 +54,7 @@ f <$> x = map (f <$ᶠ>_) (future-<$>-Preserves-≤ᵗ, f) x
 
 -- Map the given function over the time of each `Future A` in the event.
 -- You must also provide proof that this mapping preserves the time-sortedness of the event.
-mapTimes : (f : T̂ → T̂) → (f Preserves _≤ᵗ_ ⟶ _≤ᵗ_) → Event A → Event A
+mapTimes : (f : T̂ → T̂) → f Preserves _≤ᵗ_ ⟶ _≤ᵗ_ → Event A → Event A
 mapTimes {A} f p (e , sorted) =
   List.map (mapTime f) e
     , map⁺ (future-totalOrder A) (future-totalOrder A) (future-mapTime-Preserves-≤ᵗ, f p) sorted
