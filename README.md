@@ -24,7 +24,7 @@ If it gives no output then all is well!
 
 ## Reading the Code
 
-The Agda source code is in [./src/FRP].
+The Agda source code is in [./src/FRP](./src/FRP).
 
 ### Time
 
@@ -33,40 +33,40 @@ We don't choose a concrete underlying type for time, but we do define constraint
 Most modules are parameterised by this type, so a user of agda-frp as a library would need to define this, and create an object of type [DecOrderedGroup](./src/FRP/Time/DecOrderedGroup.agda).
 
 We extend the underlying type by adding `-∞` and `∞` so that we can have time values which occur before or after any others, e.g. Events that are guaranteed to already have occurred.
-This is done in [./src/FRP/Time/T+.agda].
+This is done in [./src/FRP/Time/T+.agda](./src/FRP/Time/T+.agda).
 
-It is all tied together in [./src/FRP/Time.agda].
+It is all tied together in [./src/FRP/Time.agda](./src/FRP/Time.agda).
 After importing this you will have the type `T` available as the underlying time type, with the convention of a `ₜ` (subscript 't') suffix on operators and properties, etc. E.g. compare values of type `T` with `≤ₜ`.
 You will also have the type `T̂`, which extends `T` with `-∞` and `∞`.
 This uses a `ᵗ` (superscript `t`) suffix.
 
 ### Semantics
 
-The semantics, or specification, is in [./src/FRP/Semantics].
+The semantics, or specification, is in [./src/FRP/Semantics](./src/FRP/Semantics).
 Here we have:
 
-* [./src/FRP/Semantics/Behavior.agda] for importing `Behavior` -- time-varying values
-* [./src/FRP/Semantics/Behavior/Type.agda] the type and basic operators
-* [./src/FRP/Semantics/Behavior/Raw.agda] raw instances for e.g. functor and applicative.
-* [./src/FRP/Semantics/Behavior/Laws.agda] proofs that the raw instances behave the relevant laws.
-* [./src/FRP/Semantics/Future.agda] `Future` -- pairs of time (`T̂`) and value for use in `Event`s. We can map over either the time or the value, and sort by time (suffix `ᵗ,`).
-* [./src/FRP/Semantics/Event.agda] for importing `Event`.
-* [./src/FRP/Semantics/Event/Type.agda] the type and basic operations (`merge`, `map`, `<$>`, etc.)
-* [./src/FRP/Semantics/Event/Raw.agda] raw instances for e.g. monoid and functor.
+* [./src/FRP/Semantics/Behavior.agda](./src/FRP/Semantics/Behavior.agda) for importing `Behavior` -- time-varying values
+* [./src/FRP/Semantics/Behavior/Type.agda](./src/FRP/Semantics/Behavior/Type.agda) the type and basic operators
+* [./src/FRP/Semantics/Behavior/Raw.agda](./src/FRP/Semantics/Behavior/Raw.agda) raw instances for e.g. functor and applicative.
+* [./src/FRP/Semantics/Behavior/Laws.agda](./src/FRP/Semantics/Behavior/Laws.agda) proofs that the raw instances behave the relevant laws.
+* [./src/FRP/Semantics/Future.agda](./src/FRP/Semantics/Future.agda) `Future` -- pairs of time (`T̂`) and value for use in `Event`s. We can map over either the time or the value, and sort by time (suffix `ᵗ,`).
+* [./src/FRP/Semantics/Event.agda](./src/FRP/Semantics/Event.agda) for importing `Event`.
+* [./src/FRP/Semantics/Event/Type.agda](./src/FRP/Semantics/Event/Type.agda) the type and basic operations (`merge`, `map`, `<$>`, etc.)
+* [./src/FRP/Semantics/Event/Raw.agda](./src/FRP/Semantics/Event/Raw.agda) raw instances for e.g. monoid and functor.
 
 ### Implementation
 
 The implementation implements the specification in a more efficient way, or at least will one day.
 At this stage the implementation is identical to the specification, but also has functions to map to the specification and proofs that these mappings are homomorphisms.
 
-* [./src/FRP/Implementation/Behavior.agda] as in `Semantics`, but adds timeᵇ, a behavior that returns the current time
-* [./src/FRP/Implementation/Behavior/Type.agda] as in `Semantics`, but adds `at` to map from implementation `Behavior` to semantic `Behavior`.
-* [./src/FRP/Iķplementation/Behavior/Raw.agda] functor, applicative.
-* [./src/FRP/Implementation/Behavior/Laws.agda] proofs that `at` is a functor morphism and an applicative morphism.
-* [./src/FRP/Implementation/Event.agda]
-* [./src/FRP/Implementation/Event/Type.agda] as in `Semantics`, but with `occs` (short for 'occurrences') to map from implementation `Event` to semantic `Event`.
-* [./src/FRP/Implementation/Event/Raw.agda] Monoid and Functor; Applicative and Monad still to do.
-* [./src/FRP/Implementation/Event/Laws.agda] proofs that `occs` is a Monoid and Functor morphism.
+* [./src/FRP/Implementation/Behavior.agda](./src/FRP/Implementation/Behavior.agda) as in `Semantics`, but adds timeᵇ, a behavior that returns the current time
+* [./src/FRP/Implementation/Behavior/Type.agda](./src/FRP/Implementation/Behavior/Type.agda) as in `Semantics`, but adds `at` to map from implementation `Behavior` to semantic `Behavior`.
+* [./src/FRP/Iķplementation/Behavior/Raw.agda](./src/FRP/Iķplementation/Behavior/Raw.agda) functor, applicative.
+* [./src/FRP/Implementation/Behavior/Laws.agda](./src/FRP/Implementation/Behavior/Laws.agda) proofs that `at` is a functor morphism and an applicative morphism.
+* [./src/FRP/Implementation/Event.agda](./src/FRP/Implementation/Event.agda)
+* [./src/FRP/Implementation/Event/Type.agda](./src/FRP/Implementation/Event/Type.agda) as in `Semantics`, but with `occs` (short for 'occurrences') to map from implementation `Event` to semantic `Event`.
+* [./src/FRP/Implementation/Event/Raw.agda](./src/FRP/Implementation/Event/Raw.agda) Monoid and Functor; Applicative and Monad still to do.
+* [./src/FRP/Implementation/Event/Laws.agda](./src/FRP/Implementation/Event/Laws.agda) proofs that `occs` is a Monoid and Functor morphism.
 
 ## Work in Progress
 
