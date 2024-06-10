@@ -81,3 +81,8 @@ Things I haven't figured out yet:
 * I can't currently write `Event`'s `join`, because of universe levels.
   The problem is that `Event` uses `Sorted`, which marries the universe levels a and ℓ from the time sorting, so `Event (Event A)` isn't allowed.
   I could fix this either by simply using one level, 'a', rather than having a separate ℓ; or by not using `Sorted`; or maybe there's another way?
+
+Still to do:
+
+* Efficient implementations as per the paper.
+  They are currently simply copies of the specification.
