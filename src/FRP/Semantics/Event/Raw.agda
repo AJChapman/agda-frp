@@ -22,7 +22,7 @@ private
   variable
     A : Set a
 
-event-rawMonoid : Set a → RawMonoid (a ⊔ ℓ) (a ⊔ ℓ)
+event-rawMonoid : Set a → RawMonoid a a
 event-rawMonoid A = record
   { Carrier = Event A
   ; _≈_ = _≡_
@@ -74,4 +74,4 @@ event-rawFunctor = record
 --   --   2. Treat the times in each Event B as *relative* to the event which caused it, so add them to the time of that event
 --   --   3. Join by merging all the resultant event lists
 --   }
--- 
+--  
