@@ -53,6 +53,7 @@ Here we have:
 * [Semantics/Event.agda](./src/FRP/Semantics/Event.agda) for importing `Event`.
 * [Semantics/Event/Type.agda](./src/FRP/Semantics/Event/Type.agda) the type and basic operations (`merge`, `map`, `<$>`, etc.)
 * [Semantics/Event/Raw.agda](./src/FRP/Semantics/Event/Raw.agda) raw instances for e.g. monoid and functor.
+* [Semantics/Event/Laws.agda](./src/FRP/Semantics/Event/Laws.agda) proofs that operations on an event maintain the sorting of the occurrences of the event.
 
 ### Implementation
 
@@ -72,15 +73,11 @@ At this stage the implementation is identical to the specification, but also has
 
 Things I haven't figured out yet:
 
-* Should `Event` be a `Sorted` list of `Future`, i.e. a pair of the list and a proof that it is sorted, or should it simply be a `List`, and we separately prove that each operator maintains the sorting, but don't carry the proof around everywhere.
 * Should `Future` be under `Time` rather than under `Semantics`?
 * Is there any point using Felix, e.g. I have defined a `Category` instance for `Behavior`, and it's lawful, but is it any use?
 * Should we use absolute or relative semantics for Event times?
   Conal's paper uses absolute, but mentions the possibility of relative in a couple of places.
   Relative may make some things simpler, such as the `pure` Event simply having time `0`, instead of `-∞`, and `join` not needing to change the times of sub-events.
-* I can't currently write `Event`'s `join`, because of universe levels.
-  The problem is that `Event` uses `Sorted`, which marries the universe levels a and ℓ from the time sorting, so `Event (Event A)` isn't allowed.
-  I could fix this either by simply using one level, 'a', rather than having a separate ℓ; or by not using `Sorted`; or maybe there's another way?
 
 Still to do:
 
