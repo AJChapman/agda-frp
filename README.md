@@ -1,6 +1,4 @@
-# Agda Functional Reactive Programming (FRP)
-
-**Work In Progress**
+# **Work In Progress** Agda Functional Reactive Programming (FRP)
 
 This is my attempt at porting the system described in [Conal Elliot's Push-Pull Functional Reactive Programming](http://conal.net/papers/push-pull-frp/push-pull-frp.pdf) to [Agda](https://agda.readthedocs.io/en/latest/getting-started/what-is-agda.html).
 
