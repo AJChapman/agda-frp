@@ -23,6 +23,8 @@ open DecOrderedGroup Time public
     ; trans to transₜ
     ; antisym to antisymₜ
     ; total to totalₜ
+    ; +-monoʳ-≤ to +-monoʳ-≤ₜ
+    ; totalOrder to T-totalOrder
     )
 
 open import FRP.Time.T+ Time public

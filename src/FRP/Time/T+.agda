@@ -27,6 +27,7 @@ open DecOrderedGroup Time
     ; trans to transₜ
     ; antisym to antisymₜ
     ; total to totalₜ
+    ; _+_ to _+ₜ_
     )
 
 data T̂ : Set a where

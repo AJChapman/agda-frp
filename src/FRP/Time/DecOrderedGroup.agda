@@ -4,7 +4,7 @@ open import Level using (suc; _⊔_)
 
 open import Algebra.Core using (Op₁; Op₂)
 open import Algebra.Structures using (IsGroup)
-open import Relation.Binary.Core using (Rel)
+open import Relation.Binary.Core using (Rel; _Preserves_⟶_)
 open import Relation.Binary.Bundles using (TotalOrder; DecPoset)
 open import Relation.Binary.Structures using (IsDecTotalOrder; IsDecEquivalence)
 
@@ -22,6 +22,7 @@ record DecOrderedGroup a ℓ₁ ℓ₂ : Set (suc (a ⊔ ℓ₁ ⊔ ℓ₂)) whe
     ε : Carrier
     _⁻¹ : Op₁ Carrier
     isGroup : IsGroup _≈_ _+_ ε _⁻¹
+    +-monoʳ-≤ : ∀ c → (c +_) Preserves _≤_ ⟶ _≤_
 
   -- The below is boilerplate borrowed from DecTotalOrder
   private module DTO = IsDecTotalOrder isDecTotalOrder

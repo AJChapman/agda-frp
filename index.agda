@@ -8,7 +8,7 @@ module index
 
 open import FRP.Time Time
 open import FRP.Semantics.Behavior Time
-open import FRP.Semantics.Future Time
 open import FRP.Semantics.Event Time
+open import FRP.Semantics.Future Time
 open import FRP.Implementation.Behavior Time
 open import FRP.Implementation.Event Time
