@@ -6,12 +6,13 @@ module FRP.Implementation.Event.Type
   (Time : DecOrderedGroup a ℓ ℓ)
   where
 
+open import Function using (_∘_)
 open import Data.List as List using (List; [_])
 open import Data.Product using (_×_; _,_)
 open import Function using (id)
 open import Relation.Binary.Core using (_Preserves_⟶_)
 
-open import FRP.Time Time using (T; 0ₜ; _≤ₜ_; T-totalOrder)
+open import FRP.Time Time using (T; 0ₜ; _≤ₜ_; _+ₜ_; T-totalOrder; +-monoʳ-≤ₜ)
 open import FRP.Semantics.Event Time as S using ()
 open import FRP.Semantics.Future Time
   using (Future; 0ₜ,; mapTime; _<$>ₜ,_; _≤ₜ,_; _≤?ₜ,_; future-<$>-Preserves-≤ₜ,)
@@ -60,3 +61,11 @@ f <$> x = map (f <$>ₜ,_) (future-<$>-Preserves-≤ₜ, f) x
 mapTimes : (f : T → T) → f Preserves _≤ₜ_ ⟶ _≤ₜ_ → Event A → Event A
 mapTimes {A} f p e =  List.map (mapTime f) e
 
+addToTimes : T → Event A → Event A
+addToTimes t = mapTimes (t +ₜ_) (+-monoʳ-≤ₜ t)
+
+offsetEvents : Event (Event A) → List (Event A)
+offsetEvents = List.map (λ (t , e) → addToTimes t e) -- TODO: use mapEvent instead of List.map
+
+joinEvents : Event (Event A) → Event A
+joinEvents = List.foldr merge empty ∘ offsetEvents

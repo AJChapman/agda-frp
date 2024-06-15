@@ -10,6 +10,7 @@ open import Algebra using (RawMonoid)
 open import Algebra.Morphism.Structures using (module MagmaMorphisms; module MonoidMorphisms)
 open import Effect.Functor as F using ()
 open import Effect.Applicative as A using ()
+open import Effect.Monad as M using ()
 open import Relation.Binary.PropositionalEquality using (refl; cong)
 
 open import FRP.Implementation.Event.Type Time using (occs)
@@ -55,14 +56,14 @@ module EventMorphisms (A : Set a) where
       ; op-<$> = λ f x → refl
       }
 
---     occs-applicativeMorphism : A.Morphism E.event-rawApplicative Eₛ-event-rawApplicative
---     occs-applicativeMorphism = record
---       { functorMorphism = occs-functorMorphism
---       ; op-pure = λ x → refl
---       ; op-<*> = λ f x → refl
---       }
--- 
---     occs-monadMorphism : M.Morphism E.event-rawMonad Eₛ-event-rawMonad
---     occs-monadMorphism = record
---       {
---       }
+    occs-applicativeMorphism : A.Morphism E.event-rawApplicative Eₛ.event-rawApplicative
+    occs-applicativeMorphism = record
+      { functorMorphism = occs-functorMorphism
+      ; op-pure = λ x → refl
+      ; op-<*> = λ f x → refl
+      }
+
+    -- occs-monadMorphism : M.Morphism E.event-rawMonad Eₛ.event-rawMonad
+    -- occs-monadMorphism = record
+      -- {
+      -- }

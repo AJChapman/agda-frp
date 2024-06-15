@@ -7,7 +7,7 @@ module FRP.Implementation.Event.Raw
   where
 
 open import FRP.Time Time
-open import FRP.Implementation.Event.Type Time renaming (_<$>_ to _<$ᵉ>_)
+open import FRP.Implementation.Event.Type Time renaming (_<$>_ to _<$>ₑ_)
 
 open import Algebra using (RawMonoid)
 open import Data.List using ([]; map; [_])
@@ -16,6 +16,10 @@ open import Effect.Applicative using (RawApplicative)
 open import Effect.Functor using (RawFunctor)
 open import Effect.Monad using (RawMonad)
 open import Relation.Binary.PropositionalEquality using (_≡_)
+
+private
+  variable
+    A B : Set a
 
 event-rawMonoid : Set a → RawMonoid a a
 event-rawMonoid A = record
@@ -27,18 +31,32 @@ event-rawMonoid A = record
 
 event-rawFunctor : RawFunctor Event
 event-rawFunctor = record
-  { _<$>_ = _<$ᵉ>_ }
+  { _<$>_ = _<$>ₑ_ }
 
--- event-rawApplicative : RawApplicative Event
--- event-rawApplicative = record
---   { rawFunctor = event-rawFunctor
---   ; pure = λ x → [ -∞ , x ]
---   ; _<*>_ = {!!}
---   }
--- 
--- event-rawMonad : RawMonad Event
--- event-rawMonad = record
---   { rawApplicative = event-rawApplicative
---   ; _>>=_ = {!!}
---   }
--- 
+pure : A → Event A
+pure = now
+
+-- 1. Apply the A → Event B to each A, resulting in an Event (Event B)
+-- 2. Treat the times in each Event B as *relative* to the event which caused it, so add them to the time of that event
+-- 3. Join by merging all the resultant event lists
+infixr 5 _>>=_
+_>>=_ : Event A → (A → Event B) → Event B
+ea >>= f = joinEvents (f <$>ₑ ea)
+
+infixr 4 _<*>_
+_<*>_ : Event (A → B) → Event A → Event B
+ef <*> ex = ef >>= (λ f → f <$>ₑ ex)
+
+event-rawApplicative : RawApplicative Event
+event-rawApplicative = record
+  { rawFunctor = event-rawFunctor
+  ; pure = pure
+  ; _<*>_ = _<*>_
+  }
+
+event-rawMonad : RawMonad Event
+event-rawMonad = record
+  { rawApplicative = event-rawApplicative
+  ; _>>=_ = _>>=_
+  }
+ 
